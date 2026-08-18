@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+
+    <title>
+        AI Photo Map
+    </title>
+
+    <script src="https://cdn.jsdelivr.net/npm/heic2any/dist/heic2any.min.js"></script>
+    <!-- MapTiler SDK CSS -->
+    <link
+        href="https://cdn.maptiler.com/maptiler-sdk-js/latest/maptiler-sdk.css"
+        rel="stylesheet">
+
+
+    <!-- Application CSS -->
+    <link
+        href="css/style.css"
+        rel="stylesheet">
+
+
+</head>
+
+<body>
+
+
+    <!-- =====================================================
+         MAP
+         ===================================================== -->
+
+    <div id="map"></div>
+
+
+
+    <!-- =====================================================
+         TOP CONTROL PANEL
+         ===================================================== -->
+
+    <div id="controls">
+
+
+        <label class="button">
+
+            Load GeoPackage
+
+            <input
+                id="gpkgFile"
+                type="file"
+                accept=".gpkg">
+
+        </label>
+
+
+
+        <button
+            id="chooseFolder">
+
+            Choose Photo Folder
+
+        </button>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         STATUS OVERLAY
+         ===================================================== -->
+
+    <div id="status">
+
+        Ready
+
+    </div>
+
+
+
+    <!-- =====================================================
+         MapTiler SDK
+         ===================================================== -->
+
+    <script
+        src="https://cdn.maptiler.com/maptiler-sdk-js/latest/maptiler-sdk.umd.min.js">
+    </script>
+
+    <!-- MapTiler -->
+    <script src="https://cdn.maptiler.com/maptiler-sdk-js/latest/maptiler-sdk.umd.min.js"></script>
+
+
+    <!-- GeoPackage + SQL.js -->
+    <script src="https://unpkg.com/@ngageoint/geopackage/dist/geopackage.min.js"></script>
+
+
+    <script>
+
+    GeoPackage.setSqljsWasmLocateFile(
+        filename =>
+            "https://unpkg.com/@ngageoint/geopackage/dist/" + filename
+    );
+
+    </script>
+
+
+    <!-- Application -->
+    <script type="module" src="js/app.js"></script>
+
+
+    </body>
+
+</html>

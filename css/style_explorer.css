@@ -1,0 +1,215 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    background: #111;
+    color: white;
+}
+
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* --------------------------------------------------
+   Toolbar
+-------------------------------------------------- */
+
+.toolbar {
+
+    height: 64px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 0 20px;
+
+    background: #1c1c1c;
+
+    border-bottom:
+        1px solid #333;
+}
+
+
+.toolbar h1 {
+
+    margin: 0;
+
+    font-size: 18px;
+
+    font-weight: 500;
+}
+
+
+#imageCount {
+
+    margin-left: auto;
+
+    color: #999;
+
+    font-size: 13px;
+}
+
+
+/* --------------------------------------------------
+   Toggle
+-------------------------------------------------- */
+
+.view-toggle {
+
+    display: flex;
+
+    background: #2a2a2a;
+
+    border-radius: 8px;
+
+    padding: 3px;
+}
+
+
+.toggle-button {
+
+    border: 0;
+
+    background: transparent;
+
+    color: #aaa;
+
+    padding: 8px 14px;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    font-size: 13px;
+}
+
+
+.toggle-button:hover {
+
+    color: white;
+}
+
+
+.toggle-button.active {
+
+    background: #fff;
+
+    color: #111;
+}
+
+
+/* --------------------------------------------------
+   Main canvas
+-------------------------------------------------- */
+
+main {
+
+    flex: 1;
+
+    min-height: 0;
+
+    overflow: hidden;
+}
+
+
+.canvas {
+
+    position: relative;
+
+    width: 100%;
+
+    height: 100%;
+
+    background: #111;
+}
+
+
+/* --------------------------------------------------
+   Images
+-------------------------------------------------- */
+
+.image-tile {
+
+    position: absolute;
+
+    width: 70px;
+
+    height: 70px;
+
+    object-fit: cover;
+
+    border-radius: 3px;
+
+    cursor: pointer;
+
+    transition:
+        left 700ms cubic-bezier(.2,.8,.2,1),
+        top 700ms cubic-bezier(.2,.8,.2,1),
+        transform 150ms ease,
+        opacity 300ms ease;
+
+    user-select: none;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,.4);
+}
+
+
+.image-tile:hover {
+
+    transform: scale(1.12);
+
+    z-index: 1000;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.7);
+}
+
+
+/* --------------------------------------------------
+   Info popup
+-------------------------------------------------- */
+
+.info {
+
+    position: fixed;
+
+    right: 20px;
+    bottom: 20px;
+
+    width: 280px;
+
+    padding: 14px;
+
+    background: rgba(25,25,25,.95);
+
+    border:
+        1px solid #444;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+
+    z-index: 2000;
+}
+
+
+.info.hidden {
+
+    display: none;
+}
