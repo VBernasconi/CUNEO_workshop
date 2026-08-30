@@ -26,7 +26,7 @@ export function createMap() {
     // Replace with your MapTiler API key
 
     maptilersdk.config.apiKey =
-        "72lyzb1dsH5d7vS7hW5x";
+        "PLACE YOUR API KEY HERE";
 
 
 
