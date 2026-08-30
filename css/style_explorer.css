@@ -213,3 +213,94 @@ main {
 
     display: none;
 }
+
+.image-tile {
+
+    position: absolute;
+
+    width: 70px;
+    height: 70px;
+
+    cursor: pointer;
+
+    overflow: hidden;
+
+    border-radius: 4px;
+
+    /*
+     * Smooth movement between projections.
+     */
+
+    transition:
+        left 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+        top 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.15s ease;
+
+}
+
+
+
+.image-tile img {
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+}
+
+
+/*
+ * Main image is visible by default.
+ */
+
+.main-image {
+
+    opacity: 1;
+
+    transition:
+        opacity 0.2s ease;
+}
+
+
+/*
+ * Depth image is hidden by default.
+ */
+
+.depth-image {
+
+    opacity: 0;
+
+    transition:
+        opacity 0.2s ease;
+}
+
+
+/*
+ * Hover:
+ * hide the normal image and reveal depth.
+ */
+
+.image-tile:hover {
+
+    transform: scale(1.25);
+
+    z-index: 1000;
+}
+
+
+.image-tile:hover .main-image {
+
+    opacity: 0;
+}
+
+
+.image-tile:hover .depth-image {
+
+    opacity: 1;
+}
