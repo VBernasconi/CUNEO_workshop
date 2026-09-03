@@ -751,7 +751,7 @@ function getDepthThumbnailPath(image) {
             ""
         );
 
-    return `/data/depth/${encodeURIComponent(
+    return `/data/DEPTH_IMAGES/${encodeURIComponent(
         baseName
     )}_depth.png`;
 }
@@ -954,13 +954,8 @@ function normalize(
 
 function positionImages() {
 
-    const width =
-        canvas.clientWidth;
-
-
-    const height =
-        canvas.clientHeight;
-
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
 
     if (!width || !height)
         return;
@@ -976,84 +971,53 @@ function positionImages() {
 
     if (currentMode === "visual") {
 
-        xValues =
-            images.map(
-                image =>
-                    image.visualX
-            );
+        xValues = images.map(
+            image => image.visualX
+        );
 
+        yValues = images.map(
+            image => image.visualY
+        );
 
-        yValues =
-            images.map(
-                image =>
-                    image.visualY
-            );
+    } else if (currentMode === "depth") {
 
-    } else if (
-        currentMode === "depth"
-    ) {
+        xValues = images.map(
+            image => image.depthX
+        );
 
-        xValues =
-            images.map(
-                image =>
-                    image.depthX
-            );
-
-
-        yValues =
-            images.map(
-                image =>
-                    image.depthY
-            );
+        yValues = images.map(
+            image => image.depthY
+        );
 
     } else {
 
-        xValues =
-            images
-                .map(
-                    image =>
-                        image.longitude
-                )
-                .filter(
-                    Number.isFinite
-                );
+        xValues = images
+            .map(image => image.longitude)
+            .filter(Number.isFinite);
 
-
-        yValues =
-            images
-                .map(
-                    image =>
-                        image.latitude
-                )
-                .filter(
-                    Number.isFinite
-                );
+        yValues = images
+            .map(image => image.latitude)
+            .filter(Number.isFinite);
     }
 
 
-    const xRange =
-        getRange(xValues);
-
-
-    const yRange =
-        getRange(yValues);
+    const xRange = getRange(xValues);
+    const yRange = getRange(yValues);
 
 
     /*
-     * Geographic visualization gets a larger
-     * virtual canvas.
+     * Use the ACTUAL visible canvas for every mode.
+     *
+     * Previously geo used width * 2.5 and height * 2.5,
+     * which made geographic points spread over a huge
+     * virtual area.
      */
 
-    const virtualWidth =
-        currentMode === "geo"
-            ? width * 2.5
-            : width;
+    const availableWidth =
+        width - IMAGE_SIZE - PADDING * 2;
 
-
-    const virtualHeight =
-        currentMode === "geo"
-            ? height * 2.5
-            : height;
+    const availableHeight =
+        height - IMAGE_SIZE - PADDING * 2;
 
 
     /*
@@ -1066,39 +1030,25 @@ function positionImages() {
         let y;
 
 
-        if (
-            currentMode === "visual"
-        ) {
+        if (currentMode === "visual") {
 
-            x =
-                image.visualX;
+            x = image.visualX;
+            y = image.visualY;
 
-            y =
-                image.visualY;
+        } else if (currentMode === "depth") {
 
-        } else if (
-            currentMode === "depth"
-        ) {
-
-            x =
-                image.depthX;
-
-            y =
-                image.depthY;
+            x = image.depthX;
+            y = image.depthY;
 
         } else {
 
-            x =
-                image.longitude;
-
-            y =
-                image.latitude;
+            x = image.longitude;
+            y = image.latitude;
         }
 
 
         /*
-         * Hide images that don't have a valid
-         * coordinate for the selected projection.
+         * Hide images without valid coordinates.
          */
 
         if (
@@ -1106,59 +1056,55 @@ function positionImages() {
             !Number.isFinite(y)
         ) {
 
-            image.element.style.display =
-                "none";
+            image.element.style.display = "none";
 
             continue;
         }
 
 
-        image.element.style.display =
-            "block";
+        image.element.style.display = "block";
 
 
-        const nx =
-            normalize(
-                x,
-                xRange.min,
-                xRange.max
-            );
+        /*
+         * Normalize coordinates to 0 → 1.
+         */
+
+        const nx = normalize(
+            x,
+            xRange.min,
+            xRange.max
+        );
+
+        const ny = normalize(
+            y,
+            yRange.min,
+            yRange.max
+        );
 
 
-        const ny =
-            normalize(
-                y,
-                yRange.min,
-                yRange.max
-            );
-
+        /*
+         * Convert to visible-canvas coordinates.
+         */
 
         const virtualX =
             PADDING +
-            nx *
-            (
-                virtualWidth -
-                IMAGE_SIZE -
-                PADDING * 2
-            );
+            nx * availableWidth;
 
 
         const virtualY =
             PADDING +
-            (1 - ny) *
-            (
-                virtualHeight -
-                IMAGE_SIZE -
-                PADDING * 2
-            );
+            (1 - ny) * availableHeight;
 
+
+        /*
+         * Apply zoom and pan.
+         */
 
         const px =
             (
                 virtualX -
-                virtualWidth / 2
-            ) *
-            zoom
+                width / 2
+            ) * zoom
             +
             width / 2
             +
@@ -1168,9 +1114,8 @@ function positionImages() {
         const py =
             (
                 virtualY -
-                virtualHeight / 2
-            ) *
-            zoom
+                height / 2
+            ) * zoom
             +
             height / 2
             +
@@ -1180,11 +1125,11 @@ function positionImages() {
         image.element.style.left =
             `${px}px`;
 
-
         image.element.style.top =
             `${py}px`;
     }
 }
+
 
 
 /*

@@ -167,17 +167,7 @@ function buildPopupHTML(photo) {
 
 
 
-                <button
-
-                    class="gallery-button"
-
-                    data-action="open-gallery"
-
-                >
-
-                    View image
-
-                </button>
+                
 
 
             </div>
